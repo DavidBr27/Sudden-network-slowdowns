@@ -1,6 +1,9 @@
 
 # **🎯Sudden Network Slowdowns Incident**
 
+![image](https://github.com/user-attachments/assets/7bffd2e8-07b9-4d9c-b848-eaaad0e6770d)
+
+
 ## 📚 **Scenario:**
 I've observed a noticeable drop in network performance, particularly affecting some of the older devices within the 10.0.0.0/16 subnet. External DDoS attacks have been ruled out, and the security team now suspects that the issue may be originating from inside the network. Currently, all internal traffic is permitted by default across all hosts. Additionally, users have unrestricted access to PowerShell and other tools, which raises concerns. There’s a possibility that someone within the network is either downloading large volumes of data or conducting port scans against internal systems.
 
