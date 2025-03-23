@@ -1,8 +1,5 @@
-## **🎯Sudden Network Slowdowns Incident**
 
-![image (6)](https://github.com/user-attachments/assets/13a2858a-3e92-43fe-9b05-1df1ac32d1ac)
-
-# Incident Investigation Report
+# **🎯Sudden Network Slowdowns Incident**
 
 ## 📚 **Scenario:**
 I've observed a noticeable drop in network performance, particularly affecting some of the older devices within the 10.0.0.0/16 subnet. External DDoS attacks have been ruled out, and the security team now suspects that the issue may be originating from inside the network. Currently, all internal traffic is permitted by default across all hosts. Additionally, users have unrestricted access to PowerShell and other tools, which raises concerns. There’s a possibility that someone within the network is either downloading large volumes of data or conducting port scans against internal systems.
@@ -44,8 +41,7 @@ DeviceProcessEvents
    | order by ConnectionCount
    ```
 
-![image](https://github.com/user-attachments/assets/30798316-4c7e-4de5-9f33-fd091469844b)
-
+    <p align="center"> <img src="https://github.com/user-attachments/assets/30798316-4c7e-4de5-9f33-fd091469844b" alt="ConnectionFailed Summary Table" width="800"/> </p>
 
 
 2. **⚙️ Process Analysis:**
@@ -61,45 +57,71 @@ DeviceProcessEvents
     | project Timestamp, DeviceName, ActionType, RemoteIP, RemotePort, LocalIP
 
    ```
-   windows-target-1
-   ![image](https://github.com/user-attachments/assets/9fb969aa-e409-4d2b-aa2e-50132616366e)
+ <div align="center">
 
-   test-vm-david
-   ![image](https://github.com/user-attachments/assets/44eb09b8-8537-4cb3-b27a-12394cf7b01c)
+`windows-target-1` 
+<br>
+<br>
+<img src="https://github.com/user-attachments/assets/9fb969aa-e409-4d2b-aa2e-50132616366e" alt="windows-target-1 failed connections" width="800"/>
+
+</div>
+
+<div align="center">
+
+`test-vm-david`  
+<br>
+<img src="https://github.com/user-attachments/assets/44eb09b8-8537-4cb3-b27a-12394cf7b01c" alt="test-vm-david failed connections" width="800"/>
+
+</div>
 
 
    
 
-4. **🌐 Network Check:**
+3. **🌐 Network Check:**
    - **Observed Behavior:** I pivoted to the `DeviceProcessEvents` table to investigate any suspicious activity around the time the port scan began. I observed a PowerShell script named `portscan.ps1` launched on `windows-target-1` at `2025-03-20T00:37:33.6100498Z`, followed by the same script being executed on `test-vm-david` at `2025-03-20T00:38:13.8006082Z`.
 
 
    **Detection Query (KQL):**
-```kql
-let SuspectedVMs = dynamic(["test-vm-david", "windows-target-1"]);
-let specificTime = datetime("2025-03-20T00:42:04.8377505Z");
-DeviceProcessEvents
-| where Timestamp between ((specificTime - 10m) .. (specificTime + 10m))
-| where tostring(DeviceName) in (SuspectedVMs)
-| order by Timestamp desc
-| project Timestamp, FileName, DeviceName, InitiatingProcessCommandLine, AccountName
-```
-`windows-target-1`
+   ```kql
+   let SuspectedVMs = dynamic(["test-vm-david", "windows-target-1"]);
+   let specificTime = datetime("2025-03-20T00:42:04.8377505Z");
+   DeviceProcessEvents
+   | where Timestamp between ((specificTime - 10m) .. (specificTime + 10m))
+   | where tostring(DeviceName) in (SuspectedVMs)
+   | order by Timestamp desc
+   | project Timestamp, FileName, DeviceName, InitiatingProcessCommandLine, AccountName
+   ```
+<div align="center">
 
- <img src="https://github.com/user-attachments/assets/8db93fd3-c449-4c2f-8c41-7531ab35777d" alt="windows-target-1 DeviceProcessEvents output" width="800"/>
+`windows-target-1` 
+<br>
+<br>
+<img src="https://github.com/user-attachments/assets/8db93fd3-c449-4c2f-8c41-7531ab35777d" alt="windows-target-1 process events" width="800"/>
 
-`test-vm-david`
+</div>
 
-  <img src="https://github.com/user-attachments/assets/5c5a37df-d6a9-4180-832c-d5ddbf935a9b" alt="test-vm-david DeviceProcessEvents output" width="800"/>
+<div align="center">
+
+`test-vm-david` 
+<br>
+<br>
+<img src="https://github.com/user-attachments/assets/5c5a37df-d6a9-4180-832c-d5ddbf935a9b" alt="test-vm-david process events" width="800"/>
+
+</div>
 
 
 
-5. **📝 Response:**
-   - - I discovered that the port scanning script was executed by the `SYSTEM` account, which is unusual and not part of any authorized administrative setup. After isolating the affected device, I performed a malware scan that returned clean results. As a precautionary measure, I kept the device isolated and submitted a ticket to have it re-imaged. I also shared the findings with the manager, noting the automated archive creation, and am currently awaiting further guidance.
+4. **📝 Response:**
+   - I discovered that the port scanning script was executed by the `SYSTEM` account, which is unusual and not part of any authorized administrative setup. After isolating the affected device, I performed a malware scan that returned clean results. As a precautionary measure, I kept the device isolated and submitted a ticket to have it re-imaged. I also shared the findings with the manager, noting the automated archive creation, and am currently awaiting further guidance.
 
  
+<div align="center">
 
-![image](https://github.com/user-attachments/assets/3895a3fb-83af-4e37-aa9b-4bc56e30f346)
+`Preview of portscan.ps1` 
+<br>  
+<img src="https://github.com/user-attachments/assets/3895a3fb-83af-4e37-aa9b-4bc56e30f346" alt="Response Summary Screenshot" width="800"/>
+
+</div>
 
 
 ---
