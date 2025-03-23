@@ -16,19 +16,19 @@ DeviceNetworkEvents
 DeviceFileEvents
 DeviceProcessEvents
 
-```kql
-DeviceFileEvents
-| order by Timestamp desc 
-| take 10
+  ```kql
+  DeviceFileEvents
+  | order by Timestamp desc 
+  | take 10
 
-DeviceNetworkEvents
-| order by Timestamp desc 
-| take 10
+  DeviceNetworkEvents
+  | order by Timestamp desc 
+  | take 10
 
-DeviceProcessEvents
-| order by Timestamp desc 
-| take 10
-```
+  DeviceProcessEvents
+  | order by Timestamp desc 
+  | take 10
+  ```
 
 ### **Timeline Overview**
 1. **🔍 Windows-target-1 and test-vm-david were found failing multiple connection attempts to themselves and other hosts on the same network.**
