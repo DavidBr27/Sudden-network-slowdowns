@@ -112,6 +112,7 @@ DeviceProcessEvents
 
 
 4. **📝 Response:**
+   
    - I discovered that the port scanning script was executed by the `SYSTEM` account, which is unusual and not part of any authorized administrative setup. After isolating the affected device, I performed a malware scan that returned clean results. As a precautionary measure, I kept the device isolated and submitted a ticket to have it re-imaged. I also shared the findings with the manager, noting the automated archive creation, and am currently awaiting further guidance.
 
  
