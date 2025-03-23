@@ -84,11 +84,13 @@ DeviceProcessEvents
 | order by Timestamp desc
 | project Timestamp, FileName, DeviceName, InitiatingProcessCommandLine, AccountName
 ```
-windows-target-1
-![image](https://github.com/user-attachments/assets/8db93fd3-c449-4c2f-8c41-7531ab35777d)
+`windows-target-1`
 
-test-vm-david
-![image](https://github.com/user-attachments/assets/5c5a37df-d6a9-4180-832c-d5ddbf935a9b)
+ <img src="https://github.com/user-attachments/assets/8db93fd3-c449-4c2f-8c41-7531ab35777d" alt="windows-target-1 DeviceProcessEvents output" width="800"/>
+
+`test-vm-david`
+
+  <img src="https://github.com/user-attachments/assets/5c5a37df-d6a9-4180-832c-d5ddbf935a9b" alt="test-vm-david DeviceProcessEvents output" width="800"/>
 
 
 
